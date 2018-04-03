@@ -2,6 +2,9 @@
 //Libraries
 /////////////////////////////////
 #include <Automaton.h>
+#include "pins.h"
+#include "settings.h"
+
 /////////////////////////////////
 //Objects
 /////////////////////////////////
@@ -35,32 +38,32 @@ void setup() {
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             sol1.trigger(sol1.EVT_START);
             sol8.trigger(sol8.EVT_START);
-            }
+            });
   trigger2.begin(TRIGGER2, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             sol2.trigger(sol2.EVT_START);
-            }
+            });
   trigger3.begin(TRIGGER3, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             sol3.trigger(sol3.EVT_START);
-            }
+            });
   trigger4.begin(TRIGGER4, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             sol4.trigger(sol4.EVT_START);
-            }
+            });
   trigger5.begin(TRIGGER5, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             sol5.trigger(sol5.EVT_START);
             sol8.trigger(sol8.EVT_START);
-            }
+            });
   trigger6.begin(TRIGGER6, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             sol1.trigger(sol1.EVT_START);
-            }
+            });
   powerOff.begin(OFFPIN, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             motor.trigger(motor.EVT_START);
-            }
+            });
   sol1.begin(SOL1,true)
       .blink(SOLPULSE);
   sol2.begin(SOL2,true)
@@ -78,10 +81,10 @@ void setup() {
   motor.begin(MOTOR)
        .blink(BALLEJECT)
        .onFinish(power,power.EVT_ON);
-  power.begin(POWER)
-         
+  power.begin(POWER);
+}
 
 void loop() {
- automoton.run();
+ automaton.run();
 
 }
