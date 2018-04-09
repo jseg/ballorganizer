@@ -65,21 +65,21 @@ void setup() {
             motor.trigger(motor.EVT_START);
             });
   sol1.begin(SOL1,true)
-      .blink(SOLPULSE);
+      .blink(SOLPULSE,1,1);
   sol2.begin(SOL2,true)
-      .blink(SOLPULSE);
+      .blink(SOLPULSE,1,1);
   sol3.begin(SOL3,true)
-      .blink(SOLPULSE);
+      .blink(SOLPULSE,1,1);
   sol4.begin(SOL4,true)
-      .blink(SOLPULSE);
+      .blink(SOLPULSE,1,1);
   sol5.begin(SOL5,true)
-      .blink(SOLPULSE);
+      .blink(SOLPULSE,1,1);
   sol6.begin(SOL6,true)
-      .blink(SOLPULSE);
+      .blink(SOLPULSE,1,1);
   sol8.begin(SOL8,true)
       .blink(SHAKE_ON,SHAKE_OFF,SHAKES);
   motor.begin(MOTOR)
-       .blink(BALLEJECT)
+       .blink(BALLEJECT,1,1)
        .onFinish(power,power.EVT_ON);
   power.begin(POWER);
 }
