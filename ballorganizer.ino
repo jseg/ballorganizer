@@ -58,10 +58,10 @@ void setup() {
             });
   trigger6.begin(TRIGGER6, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
-            sol1.trigger(sol1.EVT_START);
+            sol6.trigger(sol6.EVT_START);
             });
-  powerOff.begin(OFFPIN, DEBOUNCE, true)
-          .onChange(LOW,[] ( int idx, int v, int up ) { 
+  powerOff.begin(OFFPIN, DEBOUNCE)
+          .onChange(HIGH,[] ( int idx, int v, int up ) { 
             motor.trigger(motor.EVT_START);
             });
   sol1.begin(SOL1,true)
@@ -81,7 +81,7 @@ void setup() {
   motor.begin(MOTOR)
        .blink(BALLEJECT,1,1)
        .onFinish(power,power.EVT_ON);
-  power.begin(POWER);
+  power.begin(POWER, true);
 }
 
 void loop() {
