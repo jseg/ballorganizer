@@ -1,7 +1,7 @@
 /////////////////////////////////
 //Configurable Constants
 /////////////////////////////////
-#define BALLEJECT     350000  //the number of ms to clear balls from drum
+#define TIMEOUT       650000  //the number of ms to finish clearing balls from drum
 #define DEBOUNCE      20
 #define SOLPULSE      1000
 #define SHAKE_ON      200

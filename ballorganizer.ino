@@ -26,6 +26,8 @@ Atm_led sol8;
 Atm_led motor;
 Atm_led power;
 
+Atm_bit revolution;
+Atm_controller shutOff;
 
 
 /////////////////////////////////
@@ -60,10 +62,7 @@ void setup() {
           .onChange(LOW,[] ( int idx, int v, int up ) { 
             sol6.trigger(sol6.EVT_START);
             });
-  powerOff.begin(OFFPIN, DEBOUNCE)
-          .onChange(HIGH,[] ( int idx, int v, int up ) { 
-            motor.trigger(motor.EVT_START);
-            });
+  
   sol1.begin(SOL1,true)
       .blink(SOLPULSE,1,1);
   sol2.begin(SOL2,true)
@@ -78,10 +77,26 @@ void setup() {
       .blink(SOLPULSE,1,1);
   sol8.begin(SOL8,true)
       .blink(SHAKE_ON,SHAKE_OFF,SHAKES);
-  motor.begin(MOTOR)
-       .blink(BALLEJECT,1,1)
+  
+
+  revolution.begin();   //bit to keep track of drum rotation
+  powerOff.begin(OFFPIN, DEBOUNCE)  //digital input to initiate shutdown
+          .onChange(HIGH,[] ( int idx, int v, int up ) { 
+            motor.trigger(motor.EVT_ON);
+            trigger1.onChange(revolution, revolution.EVT_ON);
+            trigger2.sleep(1);
+            trigger3.sleep(1);
+            trigger4.sleep(1);
+            trigger5.sleep(1);
+            trigger6.sleep(1);
+            });
+  motor.begin(MOTOR)          //output to run motor
+       .blink(TIMEOUT,1,1)
        .onFinish(power,power.EVT_ON);
-  power.begin(POWER, true);
+  power.begin(POWER, true);   //output to kill power
+  shutOff.begin()             //logical condition to catch 2nd trigger1 and shutdown
+         .IF(trigger1).AND(revolution)
+         .onChange(power,power.EVT_ON); //cuts the power
 }
 
 void loop() {
