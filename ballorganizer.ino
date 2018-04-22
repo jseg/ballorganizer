@@ -103,7 +103,7 @@ void setup() {
   motor.begin(MOTOR)          //output to run motor
        .blink(TIMEOUT,1,1)
        .onFinish(power,power.EVT_ON);
-  power.begin(POWER);   //output to kill power
+  power.begin(POWER,true);   //output to kill power
 }
 
 void loop() {
