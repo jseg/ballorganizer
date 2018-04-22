@@ -25,43 +25,59 @@ Atm_led sol6;
 Atm_led sol8;
 Atm_led motor;
 Atm_led power;
-Atm_led indicator;
 
-Atm_bit revolution;
-Atm_controller shutOff;
 
 
 /////////////////////////////////
 //Globals
 /////////////////////////////////
-
+bool on = true;
+bool revolved = false;
 
 void setup() {
   trigger1.begin(TRIGGER1, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
-            sol1.trigger(sol1.EVT_START);
-            sol8.trigger(sol8.EVT_START);
+              if(on){
+                sol1.trigger(sol1.EVT_START);
+                sol8.trigger(sol8.EVT_START);
+              }
+              else if(revolved){
+                power.trigger(power.EVT_ON);
+              }
+              else{
+                revolved = true;
+              }   
             });
   trigger2.begin(TRIGGER2, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
-            sol2.trigger(sol2.EVT_START);
+            if(on){
+              sol2.trigger(sol2.EVT_START);
+              }
             });
   trigger3.begin(TRIGGER3, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
-            sol3.trigger(sol3.EVT_START);
+            if(on){
+              sol3.trigger(sol3.EVT_START);
+              }
             });
   trigger4.begin(TRIGGER4, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
-            sol4.trigger(sol4.EVT_START);
+            if(on){
+              sol4.trigger(sol4.EVT_START);
+              }
             });
   trigger5.begin(TRIGGER5, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
-            sol5.trigger(sol5.EVT_START);
-            sol8.trigger(sol8.EVT_START);
-            });
+            if(on){
+              sol5.trigger(sol5.EVT_START);
+              sol8.trigger(sol8.EVT_START);
+            }
+          });
   trigger6.begin(TRIGGER6, DEBOUNCE, true)
           .onChange(LOW,[] ( int idx, int v, int up ) { 
-            sol6.trigger(sol6.EVT_START);
+            if(on){
+              sol6.trigger(sol6.EVT_START);
+              }
             });
   
   sol1.begin(SOL1,true)
@@ -79,28 +95,15 @@ void setup() {
   sol8.begin(SOL8,true)
       .blink(SHAKE_ON,SHAKE_OFF,SHAKES);
 
-  
-
-  revolution.begin()   //bit to keep track of drum rotation
-            .led(13);
   powerOff.begin(OFFPIN, DEBOUNCE)  //digital input to initiate shutdown
           .onChange(HIGH,[] ( int idx, int v, int up ) { 
             motor.trigger(motor.EVT_ON);
-            //trigger1.onChange(LOW, revolution, revolution.EVT_TOGGLE);
-            revolution.trigger(revolution.EVT_TOGGLE);
-            trigger2.sleep(1);
-            trigger3.sleep(1);
-            trigger4.sleep(1);
-            trigger5.sleep(1);
-            trigger6.sleep(1);
+            on = false;
             });
   motor.begin(MOTOR)          //output to run motor
        .blink(TIMEOUT,1,1)
        .onFinish(power,power.EVT_ON);
   power.begin(POWER);   //output to kill power
-  shutOff.begin()             //logical condition to catch 2nd trigger1 and shutdown
-         .IF(trigger1,'=',1).AND(revolution)
-         .onChange(power,power.EVT_ON); //cuts the power
 }
 
 void loop() {
